@@ -4,12 +4,14 @@
   padding: clamp(24px, 6vw, 72px);
   background: radial-gradient(circle at top, rgba(59, 130, 246, 0.1), transparent 65%);
   min-height: 100svh;
+  justify-items: center;
 }
 
 .header {
   display: grid;
   gap: 12px;
   max-width: 720px;
+  text-align: center;
 }
 
 .header h1 {
@@ -28,6 +30,8 @@
   flex-wrap: wrap;
   gap: 16px;
   align-items: flex-end;
+  justify-content: center;
+  width: min(100%, 640px);
 }
 
 .field {
@@ -84,6 +88,8 @@
   background: rgba(148, 163, 184, 0.12);
   color: #334155;
   font-size: 14px;
+  text-align: center;
+  width: min(100%, 640px);
 }
 
 .statusError {
@@ -94,6 +100,7 @@
 .results {
   display: grid;
   gap: 16px;
+  width: min(100%, 960px);
 }
 
 .empty {
@@ -103,6 +110,7 @@
   border: 1px dashed rgba(148, 163, 184, 0.4);
   color: #475569;
   background: rgba(241, 245, 249, 0.8);
+  text-align: center;
 }
 
 .card {
@@ -113,6 +121,7 @@
   border: 1px solid rgba(148, 163, 184, 0.2);
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+  text-align: left;
 }
 
 .cardHeader {

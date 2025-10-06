@@ -12,6 +12,19 @@ type UnlikeError = {
   message?: string;
 };
 
+const parseBody = async (response: Response) => {
+  const contentType = response.headers.get("content-type") ?? "";
+  const text = await response.text();
+
+  if (text.length === 0) return null;
+
+  if (contentType.includes("application/json")) {
+    return JSON.parse(text) as UnlikeSuccess | UnlikeError;
+  }
+
+  return { error: text } satisfies UnlikeError;
+};
+
 export async function POST(request: NextRequest) {
   if (!API_KEY) {
     return NextResponse.json(
@@ -44,8 +57,7 @@ export async function POST(request: NextRequest) {
       cache: "no-store",
     });
 
-    const text = await upstream.text();
-    const data = text ? (JSON.parse(text) as UnlikeSuccess | UnlikeError) : null;
+    const data = await parseBody(upstream);
 
     if (!upstream.ok) {
       return NextResponse.json(
@@ -56,6 +68,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(data, { status: upstream.status });
   } catch (error) {
-    return NextResponse.json({ error: "Unable to reach unlike service" }, { status: 502 });
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error("Failed to call unlike API", detail);
+    return NextResponse.json(
+      { error: "Unable to reach unlike service", detail },
+      { status: 502 }
+    );
   }
 }

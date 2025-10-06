@@ -151,6 +151,46 @@ type ProfileResponse = {
   data: Profile;
 };
 
+type Company = {
+  _id: string;
+  name: string;
+  province: string;
+  logo: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type CompanyResponse = {
+  data: Company[];
+};
+
+type School = {
+  _id: string;
+  name: string;
+  province: string;
+  logo: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type SchoolResponse = {
+  data: School;
+};
+
+type Teacher = {
+  _id: string;
+  no: number;
+  name: string;
+  email: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type TeacherResponse = {
+  data: Teacher[];
+};
+
 async function handleJson<T>(response: Response, fallback: string): Promise<T> {
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
@@ -182,6 +222,39 @@ export async function fetchProfile(token: string): Promise<Profile> {
   });
 
   const json = await handleJson<ProfileResponse>(response, "Unable to load profile.");
+  return json.data;
+}
+
+export async function fetchCompanies(token: string): Promise<Company[]> {
+  const response = await fetch(`${API_BASE}/company`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const json = await handleJson<CompanyResponse>(response, "Unable to load companies.");
+  return json.data;
+}
+
+export async function fetchSchool(token: string): Promise<School> {
+  const response = await fetch(`${API_BASE}/school`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const json = await handleJson<SchoolResponse>(response, "Unable to load school.");
+  return json.data;
+}
+
+export async function fetchTeachers(token: string): Promise<Teacher[]> {
+  const response = await fetch(`${API_BASE}/teacher`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const json = await handleJson<TeacherResponse>(response, "Unable to load teachers.");
   return json.data;
 }
 
@@ -263,4 +336,4 @@ export async function unlikeStatus(statusId: string, token: string): Promise<Sta
   return json.data;
 }
 
-export type { Classmate, Status, Comment, Profile };
+export type { Classmate, Status, Comment, Profile, Company, School, Teacher };

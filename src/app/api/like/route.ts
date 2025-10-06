@@ -12,6 +12,19 @@ type LikeError = {
   message?: string;
 };
 
+const parseBody = async (response: Response) => {
+  const contentType = response.headers.get("content-type") ?? "";
+  const text = await response.text();
+
+  if (text.length === 0) return null;
+
+  if (contentType.includes("application/json")) {
+    return JSON.parse(text) as LikeSuccess | LikeError;
+  }
+
+  return { error: text } satisfies LikeError;
+};
+
 export async function POST(request: NextRequest) {
   if (!API_KEY) {
     return NextResponse.json(
@@ -44,8 +57,7 @@ export async function POST(request: NextRequest) {
       cache: "no-store",
     });
 
-    const text = await upstream.text();
-    const data = text ? (JSON.parse(text) as LikeSuccess | LikeError) : null;
+    const data = await parseBody(upstream);
 
     if (!upstream.ok) {
       return NextResponse.json(
@@ -56,6 +68,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(data, { status: upstream.status });
   } catch (error) {
-    return NextResponse.json({ error: "Unable to reach like service" }, { status: 502 });
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error("Failed to call like API", detail);
+    return NextResponse.json(
+      { error: "Unable to reach like service", detail },
+      { status: 502 }
+    );
   }
 }

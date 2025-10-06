@@ -17,7 +17,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const token = getClientToken();
     if (!token) {
-      setError("Redirecting to sign in...");
+      setError("กำลังพาไปหน้าลงชื่อเข้าใช้...");
       router.replace(loginRedirect("/profile"));
       return;
     }
@@ -27,7 +27,7 @@ export default function ProfilePage() {
         const data = await fetchProfile(token);
         setProfile(data);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Unable to load profile.";
+        const message = err instanceof Error ? err.message : "ไม่สามารถโหลดโปรไฟล์ได้";
         setError(message);
       } finally {
         setLoading(false);
@@ -62,7 +62,7 @@ export default function ProfilePage() {
 
   const content = (() => {
     if (loading) {
-      return <p className={styles.message}>Loading profile...</p>;
+      return <p className={styles.message}>กำลังโหลดโปรไฟล์...</p>;
     }
 
     if (error) {
@@ -70,7 +70,7 @@ export default function ProfilePage() {
     }
 
     if (!profile) {
-      return <p className={styles.message}>Profile not available.</p>;
+      return <p className={styles.message}>ไม่พบข้อมูลโปรไฟล์</p>;
     }
 
     const { education, school, advisor, createdAt, updatedAt } = derived;
@@ -89,7 +89,7 @@ export default function ProfilePage() {
             <h1>
               {[profile.firstname, profile.lastname].filter(Boolean).join(" ") || "Unnamed"}
             </h1>
-            <p>{profile.email ?? "No email provided"}</p>
+            <p>{profile.email ?? "ยังไม่มีอีเมล"}</p>
             {profile.role ? <span className={styles.badge}>{profile.role}</span> : null}
           </div>
         </header>
@@ -115,7 +115,13 @@ export default function ProfilePage() {
             </div>
             <div>
               <dt>Status</dt>
-              <dd>{profile.confirmed === false ? "Pending" : profile.confirmed ? "Confirmed" : "Unknown"}</dd>
+              <dd>
+                {profile.confirmed === false
+                  ? "รอการยืนยัน"
+                  : profile.confirmed
+                  ? "ยืนยันแล้ว"
+                  : "ไม่ทราบสถานะ"}
+              </dd>
             </div>
           </dl>
         </section>
@@ -130,7 +136,7 @@ export default function ProfilePage() {
               height={64}
             />
             <div>
-              <p className={styles.schoolName}>{school?.name ?? "Not specified"}</p>
+              <p className={styles.schoolName}>{school?.name ?? "ยังไม่ระบุ"}</p>
               <p className={styles.schoolMeta}>{school?.province ?? "-"}</p>
             </div>
           </div>
@@ -146,15 +152,15 @@ export default function ProfilePage() {
               height={64}
             />
             <div>
-              <p>{advisor?.name ?? "No advisor assigned"}</p>
+              <p>{advisor?.name ?? "ยังไม่มีการกำหนดอาจารย์ที่ปรึกษา"}</p>
               <p className={styles.schoolMeta}>{advisor?.email ?? "-"}</p>
             </div>
           </div>
         </section>
 
         <footer className={styles.metaFooter}>
-          <p>Profile created: {createdAt ? createdAt.toLocaleString() : "-"}</p>
-          <p>Last updated: {updatedAt ? updatedAt.toLocaleString() : "-"}</p>
+          <p>สร้างโปรไฟล์เมื่อ: {createdAt ? createdAt.toLocaleString() : "-"}</p>
+          <p>อัปเดตล่าสุด: {updatedAt ? updatedAt.toLocaleString() : "-"}</p>
         </footer>
       </div>
     );

@@ -24,7 +24,7 @@ const initialForm: FormState = {
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get("redirect") ?? "/statuses";
+  const redirectPath = searchParams.get("redirect") ?? "/";
   const redirectTimer = useRef<NodeJS.Timeout | null>(null);
 
   const [form, setForm] = useState<FormState>(initialForm);
@@ -36,7 +36,7 @@ export default function LoginPage() {
     const storedToken = getClientToken();
     if (storedToken) {
       setTokenPreview(storedToken);
-      setStatus({ message: "You are already signed in. Redirecting...", tone: "success" });
+      setStatus({ message: "คุณได้ลงชื่อเข้าใช้แล้ว กำลังพาไปยังหน้าที่ต้องการ...", tone: "success" });
       redirectTimer.current = setTimeout(() => {
         router.replace(redirectPath);
       }, 900);
@@ -58,13 +58,13 @@ export default function LoginPage() {
     event.preventDefault();
 
     if (!form.email || !form.password) {
-      setStatus({ message: "Please provide both email and password.", tone: "error" });
+      setStatus({ message: "กรุณากรอกอีเมลและรหัสผ่านให้ครบ", tone: "error" });
       return;
     }
 
     try {
       setLoading(true);
-      setStatus({ message: "Signing in...", tone: "idle" });
+      setStatus({ message: "กำลังลงชื่อเข้าใช้...", tone: "idle" });
       const data = await signIn(form);
 
       window.localStorage.setItem("classroomToken", data.token);
@@ -76,17 +76,17 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: data.token }),
       }).catch(() => {
-        /* swallow; cookie not critical for client usage */
+        /* cookie ไม่สำคัญต่อการใช้งานฝั่ง client */
       });
 
       setForm(initialForm);
-      setStatus({ message: "Sign in success. Redirecting you now...", tone: "success" });
+      setStatus({ message: "ลงชื่อเข้าใช้สำเร็จ กำลังพาไปยังหน้าถัดไป...", tone: "success" });
 
       redirectTimer.current = setTimeout(() => {
         router.push(redirectPath);
       }, 800);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unknown error";
+      const message = error instanceof Error ? error.message : "เกิดข้อผิดพลาดไม่ทราบสาเหตุ";
       setStatus({ message, tone: "error" });
     } finally {
       setLoading(false);
@@ -98,7 +98,7 @@ export default function LoginPage() {
       <section className={styles.card}>
         <header className={styles.header}>
           <h1>Sign In</h1>
-          <p>Enter your classroom email and password to receive an API token.</p>
+          <p>กรอกอีเมลและรหัสผ่านของระบบ Classroom เพื่อรับโทเคนใช้งาน API</p>
         </header>
 
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -129,7 +129,7 @@ export default function LoginPage() {
           </label>
 
           <button type="submit" className={styles.submit} disabled={loading}>
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "กำลังลงชื่อเข้าใช้..." : "Sign In"}
           </button>
         </form>
 
@@ -152,18 +152,18 @@ export default function LoginPage() {
       <aside className={styles.hint}>
         <h2>What happens next?</h2>
         <ol>
-          <li>Submit your credentials to the /api/classroom/signin endpoint.</li>
-          <li>We store the returned token securely on this device.</li>
-          <li>You are redirected to continue exploring classmates and statuses.</li>
+          <li>ส่งข้อมูลเข้าสู่ endpoint `/api/classroom/signin`</li>
+          <li>ระบบจะบันทึกโทเคนที่ได้รับบนอุปกรณ์นี้อย่างปลอดภัย</li>
+          <li>จากนั้นคุณจะถูกพาไปยังหน้าฟังก์ชันอื่นๆ ต่อทันที</li>
         </ol>
 
         {tokenPreview ? (
           <div className={styles.tokenBox}>
-            <p>Latest token detected for this browser:</p>
+            <p>โทเคนล่าสุดที่พบในเบราว์เซอร์นี้:</p>
             <code>{tokenPreview}</code>
           </div>
         ) : (
-          <p className={styles.tokenNote}>No token stored yet.</p>
+          <p className={styles.tokenNote}>ยังไม่มีโทเคนถูกบันทึก</p>
         )}
       </aside>
     </div>

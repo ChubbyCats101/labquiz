@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NavUser from "./components/NavUser";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,16 +31,21 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <div className="app-shell">
           <header className="site-header">
-            <Link href="/" className="site-logo">
-              KKU Classroom
-            </Link>
-            <nav className="site-nav">
-              <Link href="/">Home</Link>
-              <Link href="/profile">Profile</Link>
-              <Link href="/classmates">Classmates</Link>
-              <Link href="/statuses">Statuses</Link>
-              <Link href="/login">Sign In</Link>
-            </nav>
+            <div className="site-header__left">
+              <Link href="/" className="site-logo">
+                KKU Classroom
+              </Link>
+              <nav className="site-nav">
+                <Link href="/">Home</Link>
+                <Link href="/profile">Profile</Link>
+                <Link href="/company">Companies</Link>
+                <Link href="/school">School</Link>
+                <Link href="/teacher">Teachers</Link>
+                <Link href="/classmates">Classmates</Link>
+                <Link href="/statuses">Statuses</Link>
+              </nav>
+            </div>
+            <NavUser />
           </header>
 
           <main className="site-main">{children}</main>

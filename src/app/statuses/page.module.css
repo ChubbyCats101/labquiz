@@ -4,6 +4,7 @@
   padding: clamp(24px, 6vw, 72px);
   background: radial-gradient(circle at top, rgba(124, 58, 237, 0.08), transparent 65%);
   min-height: 100svh;
+  justify-items: center;
 }
 
 .header {
@@ -11,6 +12,7 @@
   gap: 12px;
   max-width: 720px;
   color: #312e81;
+  text-align: center;
 }
 
 .header h1 {
@@ -30,6 +32,8 @@
   border: 1px solid rgba(99, 102, 241, 0.2);
   padding: clamp(20px, 4vw, 32px);
   box-shadow: 0 18px 40px rgba(129, 140, 248, 0.18);
+  width: min(100%, 720px);
+  justify-self: center;
 }
 
 .postForm {
@@ -58,6 +62,7 @@
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+  justify-content: space-between;
 }
 
 .postActions button {
@@ -97,6 +102,9 @@
   background: rgba(79, 70, 229, 0.12);
   color: #312e81;
   font-size: 14px;
+  text-align: center;
+  width: min(100%, 720px);
+  justify-self: center;
 }
 
 .flashError {
@@ -112,6 +120,8 @@
 .list {
   display: grid;
   gap: 20px;
+  width: min(100%, 960px);
+  justify-self: center;
 }
 
 .loading,
@@ -122,6 +132,7 @@
   border: 1px dashed rgba(99, 102, 241, 0.3);
   background: rgba(224, 231, 255, 0.6);
   color: #4338ca;
+  text-align: center;
 }
 
 .card {
@@ -132,6 +143,7 @@
   border: 1px solid rgba(148, 163, 184, 0.24);
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 22px 48px rgba(79, 70, 229, 0.16);
+  text-align: left;
 }
 
 .cardHeader {
@@ -153,40 +165,75 @@
   color: #6b7280;
 }
 
+.likeGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.likeToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: rgba(124, 58, 237, 0.08);
+  color: #6b21a8;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.likeToggle:hover,
+.likeToggle:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(124, 58, 237, 0.45);
+  background: rgba(124, 58, 237, 0.18);
+}
+
+.likeToggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.likeIcon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.likeLabel {
+  font-size: 14px;
+}
+
+.likeTotal {
+  font-size: 14px;
+}
+
+.likeMeta {
+  font-size: 13px;
+  color: #4c1d95;
+}
+
+.likeNotice {
+  font-size: 12px;
+  color: #c026d3;
+}
+
+.likeActive {
+  background: rgba(236, 72, 153, 0.18);
+  border-color: rgba(236, 72, 153, 0.38);
+  color: #be123c;
+}
+
 .content {
   margin: 0;
   font-size: 16px;
   line-height: 1.5;
   color: #1f2937;
   white-space: pre-wrap;
-}
-
-.likeButton {
-  border: none;
-  border-radius: 999px;
-  padding: 8px 14px;
-  background: rgba(59, 130, 246, 0.08);
-  color: #1d4ed8;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.likeButton:hover,
-.likeButton:focus-visible {
-  transform: translateY(-1px);
-  background: rgba(59, 130, 246, 0.16);
-}
-
-.likeButton:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: none;
-}
-
-.likeActive {
-  background: rgba(236, 72, 153, 0.16);
-  color: #db2777;
 }
 
 .comments {
@@ -311,6 +358,32 @@
     color: #c7d2fe;
   }
 
+  .likeGroup {
+    align-items: flex-start;
+  }
+
+  .likeToggle {
+    border-color: rgba(129, 140, 248, 0.4);
+    background: rgba(124, 58, 237, 0.22);
+    color: #c4b5fd;
+  }
+
+  .likeToggle:hover,
+  .likeToggle:focus-visible {
+    border-color: rgba(192, 132, 252, 0.6);
+    background: rgba(129, 140, 248, 0.35);
+  }
+
+  .likeActive {
+    background: rgba(236, 72, 153, 0.3);
+    border-color: rgba(236, 72, 153, 0.5);
+    color: #fecdd3;
+  }
+
+  .likeMeta {
+    color: #cbd5f5;
+  }
+
   .comments li {
     background: rgba(88, 28, 135, 0.4);
     color: #ddd6fe;
@@ -339,3 +412,4 @@
     width: 100%;
   }
 }
+

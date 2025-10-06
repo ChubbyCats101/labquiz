@@ -26,7 +26,7 @@ export default function ClassmatesPage() {
   useEffect(() => {
     const storedToken = getClientToken();
     if (!storedToken) {
-      setStatus({ message: "Redirecting to sign in...", tone: "error" });
+      setStatus({ message: "กำลังพาไปหน้าลงชื่อเข้าใช้...", tone: "error" });
       router.replace(loginRedirect(redirectTarget));
       return;
     }
@@ -38,12 +38,12 @@ export default function ClassmatesPage() {
     event.preventDefault();
 
     if (!year) {
-      setStatus({ message: "Please enter an enrollment year.", tone: "error" });
+      setStatus({ message: "กรุณากรอกปีที่เข้าศึกษา", tone: "error" });
       return;
     }
 
     if (!token) {
-      setStatus({ message: "Token missing. Redirecting to sign in...", tone: "error" });
+      setStatus({ message: "ไม่พบโทเคน กำลังพาไปหน้าลงชื่อเข้าใช้...", tone: "error" });
       router.replace(loginRedirect(redirectTarget));
       return;
     }
@@ -54,10 +54,10 @@ export default function ClassmatesPage() {
       const data = await fetchClassmates(year, token);
       setClassmates(data);
       if (data.length === 0) {
-        setStatus({ message: "No classmates found for that year.", tone: "idle" });
+        setStatus({ message: "ไม่พบเพื่อนในปีการศึกษานี้", tone: "idle" });
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to load classmates.";
+      const message = error instanceof Error ? error.message : "ไม่สามารถโหลดรายชื่อเพื่อนได้";
       setStatus({ message, tone: "error" });
       setClassmates([]);
     } finally {
@@ -69,12 +69,12 @@ export default function ClassmatesPage() {
     <div className={styles.wrapper}>
       <header className={styles.header}>
         <h1>Classmates</h1>
-        <p>Search by enrollment year to view classmates, their programs, and advisors.</p>
+        <p>ค้นหารายชื่อเพื่อนร่วมรุ่น พร้อมข้อมูลสาขา อาจารย์ที่ปรึกษา และโรงเรียนต้นสังกัด</p>
       </header>
 
       <form className={styles.controls} onSubmit={handleSubmit}>
         <label className={styles.field}>
-          <span>Enrollment year</span>
+          <span>ปีที่เข้าศึกษา</span>
           <input
             type="number"
             min={2000}
@@ -87,7 +87,7 @@ export default function ClassmatesPage() {
           />
         </label>
         <button type="submit" className={styles.fetchButton} disabled={!token || loading}>
-          {loading ? "Loading..." : "Fetch classmates"}
+          {loading ? "กำลังโหลด..." : "แสดงรายชื่อ"}
         </button>
       </form>
 
@@ -99,7 +99,7 @@ export default function ClassmatesPage() {
 
       <section className={styles.results}>
         {classmates.length === 0 && !status.message ? (
-          <p className={styles.empty}>No data yet. Enter a year and fetch classmates.</p>
+          <p className={styles.empty}>ยังไม่มีข้อมูล แสดงผลเมื่อเลือกรุ่นและกดแสดงรายชื่อ</p>
         ) : null}
 
         {classmates.map((person) => (
